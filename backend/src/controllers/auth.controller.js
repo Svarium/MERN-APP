@@ -2,50 +2,50 @@ import User from "../models/user.model.js";
 import bcrypt from 'bcryptjs';
 import { createAccessToken } from "../helpers/jwt.js";
 
-export const register = async (req,res) =>{
-
+export const register = async (req, res) => {
     try {
-      const {email, password, username} = req.body;
-
-      //hash the password
-      const hashedPassword =  await bcrypt.hash(password, 10); 
-    
-      //create a new user   
-        const newUser =  new User({
-              email,
-              password:hashedPassword,
-              username
-          })
-      
-      //save the new user    
-      const userSaved = await  newUser.save() 
-
-      //create a new token
-      const token = await createAccessToken({   
-        id: userSaved.id,
+      const { username, email, password } = req.body;
+  
+      const userFound = await User.findOne({ email });
+  
+      if (userFound)
+        return res.status(400).json({
+          message: ["The email is already in use"],
+        });
+  
+      // hashing the password
+      const passwordHash = await bcrypt.hash(password, 10);
+  
+      // creating the user
+      const newUser = new User({
+        username,
+        email,
+        password: passwordHash,
+      });
+  
+      // saving the user in the database
+      const userSaved = await newUser.save();
+  
+      // create access token
+      const token = await createAccessToken({
+        id: userSaved._id,
+      });
+  
+      res.cookie("token", token, {
+        httpOnly: process.env.NODE_ENV !== "development",
+        secure: true,
+        sameSite: "none",
+      });
+  
+      res.json({
+        id: userSaved._id,
         username: userSaved.username,
-        email: userSaved.email, 
-    })
-
-    //set cookie and response tho the client
-    res.cookie("token", token);
-    res.status(200).json(
-        {
-            id:userSaved._id,
-            username: userSaved.username,
-            email: userSaved.email,
-            createdAt: userSaved.createdAt,
-            updatedAt: userSaved.updatedAt,          
-        }
-    )
-
+        email: userSaved.email,
+      });
     } catch (error) {
-        console.log(error.message);
-        return res.status(500).json({msg: "Server Error: " + error.message});        
+      res.status(500).json({ message: error.message });
     }
- 
-};
-
+  };
 
 export const login = async (req,res) =>{
     try {
