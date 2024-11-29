@@ -12,7 +12,13 @@ const app = express();
 
 dotenv.config();
 
-app.use(cors());
+app.use(cors({
+    origin: (origin, callback) => {
+        callback(null, true); // Permite cualquier origen
+    },
+    credentials: true, // Habilita el envío de cookies
+}));
+
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());

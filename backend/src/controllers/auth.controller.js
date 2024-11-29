@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from 'bcryptjs';
 import { createAccessToken } from "../helpers/jwt.js";
+import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
     try {
@@ -74,14 +75,19 @@ export const login = async (req,res) =>{
       })
   
       //set cookie and response tho the client
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
+
       res.status(200).json(
           {
               id:userFound._id,
               username: userFound.username,
               email: userFound.email,
               createdAt: userFound.createdAt,
-              updatedAt: userFound.updatedAt,          
+              updatedAt: userFound.updatedAt,       
           }
       )
   
@@ -90,7 +96,6 @@ export const login = async (req,res) =>{
           return res.status(500).json({msg: "Server Error: " + error.message});        
       }
 };
-
 
 export const logout = async (req,res) => {
     res.cookie("token", "", {expires: new Date(0)});
@@ -112,4 +117,23 @@ export const profile = async (req,res) => {
     createdAt: userFound.createdAt,
     updatedAt: userFound.updatedAt,
   })
+};
+
+export const verifyToken = async (req, res) => {
+  const { token } = req.cookies;
+  if (!token) return res.send(false);
+
+  jwt.verify(token, process.env.SECRET_KEY, async (error, user) => {
+    if (error) return res.sendStatus(401);
+
+    const userFound = await User.findById(user.id);
+    if (!userFound) return res.sendStatus(401);
+
+    return res.json({
+      id: userFound._id,
+      username: userFound.username,
+      email: userFound.email,
+      cookie:token   
+    });
+  });
 };
