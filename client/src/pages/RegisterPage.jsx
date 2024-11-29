@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/authContext";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const { register, handleSubmit, formState: {errors} } = useForm();
@@ -19,11 +19,14 @@ function RegisterPage() {
   });
 
   return (
-    <div className="bg-zinc-800 max-w-md p-10 rounded-md">
-     {registerErrors.map((error, i) => (
-      <p key={i} className="text-red-500">{error}</p>
+    <div className="flex items-center justify-center h-[calc(100vh-100px)]">   
+         
+        <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+        {registerErrors.map((error, i) => (
+      <p key={i} className="bg-red-500 p-2 text-white m-2">{error}</p>
         ))}
-      <form action="" onSubmit={onSubmit}>
+        <h1 className="text-2xl font-bold">Register</h1>
+        <form action="" onSubmit={onSubmit}>
         <input
           type="text"
           {...register("username", { required: true })}
@@ -45,8 +48,11 @@ function RegisterPage() {
           placeholder="password"
         />
          {errors.password && <p className="text-red-500">password is required</p>}
-        <button type="submit">Register</button>
+        <button type="submit" className="bg-slate-400 rounded-md p-2 my-2">Register</button>
       </form>
+      <p className="flex gap-x-2 justify-between text-sm">already have an account? <Link className="text-sky-500" to="/login">Login</Link></p>
+        </div>
+     
     </div>
   );
 }
