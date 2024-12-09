@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { createTasksRequest, getTasksRequest } from "../api/tasks";
+import { createTasksRequest, deleteTasksRequest, getTasksRequest } from "../api/tasks";
 
 const TaskContext = createContext();
 
@@ -33,6 +33,19 @@ const [tasks, setTasks] = useState([]);
       console.log(res);  
     }
 
+    //ELIMINAR UNA TAREA
+    const deleteTask = async(id) => {
+      try {
+        const res = await deleteTasksRequest(id);
+        if(res.data.message === 'Task deleted!'){
+          setTasks(tasks.filter(task => task._id !== id))
+        }
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
 
 
   return (
@@ -40,6 +53,7 @@ const [tasks, setTasks] = useState([]);
         value={{
             tasks,
             createTask,
+            deleteTask,
             getTasks
         }}>
                     {children}

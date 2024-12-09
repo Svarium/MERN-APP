@@ -15,8 +15,9 @@ export const App = () => {
     <AuthProvider>
       <TaskProvider>
         <BrowserRouter>
-        <NavBar/>
-          <Routes>
+         <main className="container mx-auto px-10">
+         <NavBar/>
+         <Routes>
             {/* RUTAS PUBLICAS */}
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -31,6 +32,7 @@ export const App = () => {
             </Route>
 
           </Routes>
+         </main>
         </BrowserRouter>
       </TaskProvider>
     </AuthProvider>
