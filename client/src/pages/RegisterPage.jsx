@@ -54,7 +54,7 @@ function RegisterPage() {
           placeholder="password"
         />
          {errors.password && <p className="text-red-500">password is required</p>}
-        <button type="submit" className="bg-slate-400 rounded-md p-2 my-2">Register</button>
+        <button type="submit" className="bg-slate-500 rounded-md p-2 my-2">Register</button>
       </form>
       <p className="flex gap-x-2 justify-between text-sm">already have an account? <Link className="text-sky-500" to="/login">Login</Link></p>
         </div>

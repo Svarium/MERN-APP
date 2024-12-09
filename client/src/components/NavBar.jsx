@@ -8,7 +8,9 @@ function NavBar() {
 
     return (
         <nav className='bg-zinc-700 flex justify-between align-center py-5 px-10 rounded-lg'>
-            <Link to='/'><h1 className='text-2xl font-bold'>Task Manager</h1></Link>
+            <Link to={
+                isAuthenticated ? "/tasks" : "/"
+            }><h1 className='text-2xl font-bold'>Task Manager</h1></Link>
             <ul className='flex gap-x-2'>
                 {
                     isAuthenticated ? (
@@ -17,22 +19,24 @@ function NavBar() {
                                 Welcome, {user.username} |
                             </li>
                             <li>
-                                <Link to='/add-task'>Add Task |</Link>
+                                <Link to='/add-task'
+                                    className='bg-indigo-500 hover:bg-indigo-700 text-white px-2 py-1 rounded-md'
+                                >Add Task</Link>
                             </li>
                             <li>
-                                <button onClick={logout}>Logout</button>
+                                <button onClick={logout}> | Logout</button>
                             </li>
                         </>
                     ) : (
                         <>
                             <li>
                                 <Link to='/login'
-                                className='bg-indigo-500 p-2 rounded-md'
+                                    className='bg-indigo-500 p-2 rounded-md'
                                 >Login</Link>
                             </li>
                             <li>
                                 <Link to='/register'
-                                 className='bg-indigo-500 p-2 rounded-md'
+                                    className='bg-indigo-500 p-2 rounded-md'
                                 >Register</Link>
                             </li>
                         </>

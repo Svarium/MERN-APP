@@ -6,14 +6,15 @@ function TaskPages() {
 
   const {getTasks, tasks} = useTasks();
 
-  useEffect(() => {
+  useEffect(() => {    
     getTasks()
+   
   }, [])
 
   if(tasks.length === 0) return (<h1>NO tasks</h1>)
 
   return (
-    <div className='grid grid-cols-3 gap-2'>
+    <div className='grid sm:grid-cols-1 md:grid-cols-3 gap-2'>
       {
         tasks.map(task => (
          <TaskCard task={task} key={task._id}>

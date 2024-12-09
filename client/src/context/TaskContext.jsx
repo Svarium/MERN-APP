@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { createTasksRequest, deleteTasksRequest, getOneTaskRequest, getTasksRequest, updateTasksRequest } from "../api/tasks";
 
 const TaskContext = createContext();
@@ -15,6 +15,8 @@ export const useTasks = () => {
 export function TaskProvider({ children }) {
     
 const [tasks, setTasks] = useState([]);
+const [errors, setErrors] = useState([]);
+
 
     //OBTENER TODAS LAS TAREAS
     const getTasks = async() => {
@@ -22,15 +24,21 @@ const [tasks, setTasks] = useState([]);
             const res = await getTasksRequest();
             setTasks(res.data);   
         } catch (error) {
-            console.log(error);            
+            console.log(error); 
+                   
         }
                
     }
 
     //CREAR UNA TAREA NUEVA
     const createTask = async(task) => { 
-      const res =  await createTasksRequest(task)
-      console.log(res);  
+      try {
+        const res =  await createTasksRequest(task)
+        console.log(res);  
+      } catch (error) {
+        console.log(error.response.data);
+        setErrors(error.response.data.message);
+      }     
     }
 
     //ELIMINAR UNA TAREA
@@ -42,8 +50,7 @@ const [tasks, setTasks] = useState([]);
         }
         
       } catch (error) {
-        console.log(error);
-        
+        console.log(error);        
       }
     }
 
@@ -63,7 +70,8 @@ const [tasks, setTasks] = useState([]);
       try {
         const res = await updateTasksRequest(id, task);
       } catch (error) {
-        console.log(error);        
+        console.log(error); 
+        setErrors(error.response.data.message);       
       }
     }
 
