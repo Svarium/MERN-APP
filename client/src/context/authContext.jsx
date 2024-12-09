@@ -51,26 +51,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = async () =>{
-    try { 
-      const res = await logoutRequest();    
+  const logout = async () => {
+    try {
+      const res = await logoutRequest();
       Cookies.remove("token");
       setUser(null);
       setIsAuthenticated(false);
-      setLoading(false);      
+      setLoading(false);
     } catch (error) {
-      console.log(error);     
+      console.log(error);
     }
   }
 
-
-    
   useEffect(() => {
     const checkLogin = async () => {
       try {
         const res = await verifyTokenRequest(); // Realiza la solicitud
         console.log("Token verification response:", res.data);
-  
+
         // Si no hay datos o el token es inválido
         if (!res.data || !res.data.id) {
           setIsAuthenticated(false);
@@ -78,7 +76,7 @@ export const AuthProvider = ({ children }) => {
           setLoading(false);
           return;
         }
-  
+
         // Actualiza el estado con los datos del usuario
         setUser(res.data);
         setIsAuthenticated(true);
@@ -90,10 +88,10 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     };
-  
+
     checkLogin();
   }, []);
-  
+
   return (
     <AuthContext.Provider
       value={{
