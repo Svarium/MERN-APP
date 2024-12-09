@@ -18,6 +18,12 @@ function RegisterPage() {
     signup(values);
   });
 
+  useEffect(() => {
+    if(isAuthenticated){
+      navigate("/tasks")
+    }
+},[isAuthenticated])
+
   return (
     <div className="flex items-center justify-center h-[calc(100vh-100px)]">   
          
