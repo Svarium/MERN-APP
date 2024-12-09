@@ -8,14 +8,15 @@ import TaskFormPage from "./pages/TaskFormPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { TaskProvider } from "./context/TaskContext";
+import NavBar from "./components/NavBar";
 
 export const App = () => {
   return (
     <AuthProvider>
       <TaskProvider>
         <BrowserRouter>
+        <NavBar/>
           <Routes>
-
             {/* RUTAS PUBLICAS */}
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
