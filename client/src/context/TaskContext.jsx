@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { createTasksRequest, deleteTasksRequest, getTasksRequest } from "../api/tasks";
+import { createTasksRequest, deleteTasksRequest, getOneTaskRequest, getTasksRequest, updateTasksRequest } from "../api/tasks";
 
 const TaskContext = createContext();
 
@@ -47,6 +47,26 @@ const [tasks, setTasks] = useState([]);
       }
     }
 
+    //OBTENER UNA TAREA
+    const getTask = async(id) => {  
+    try {
+    const res = await getOneTaskRequest(id);
+    return res.data
+
+    } catch (error) {
+      console.log(error);     
+    }  
+    }
+
+    //ACTUALIZAR UNA TAREA
+    const updateTask = async(id, task)=> {
+      try {
+        const res = await updateTasksRequest(id, task);
+      } catch (error) {
+        console.log(error);        
+      }
+    }
+
 
   return (
         <TaskContext.Provider 
@@ -54,7 +74,9 @@ const [tasks, setTasks] = useState([]);
             tasks,
             createTask,
             deleteTask,
-            getTasks
+            updateTask,
+            getTasks,
+            getTask
         }}>
                     {children}
             </TaskContext.Provider>
